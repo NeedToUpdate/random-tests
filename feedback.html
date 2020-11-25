@@ -1,0 +1,75 @@
+<html>
+    <head>
+    <script>
+let positive_words = ['well','properly','nicely','with almost no mistakes','very well']
+let sentences = ['is able to','can','likes to']
+let listening = ['is able to understand the teacher\'s questions']
+let speaking = ['can respond with sentences','can talk freely','talks fluidly','speaks out loud']
+let participation = ['is always interested','is always trying','tries every time','likes to try']
+let extras = ['with no issues','with no big problems','without other issues','is improving','is improving every day','is improving constantly']
+let negative_extra = ['could use some work','can improve','can progress a bit more']
+
+function random(array){
+    let num = Math.random()*array.length |0 ;
+    return array[num];
+}
+
+function getSentence(type,mood){
+    let verb = 'do'
+    let sentence = '';
+    if(type == 'listening'){
+        verb = 'listen'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(listening) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    if(type == 'pronounciation'){
+        verb = 'speak'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(speaking) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    
+    if(type == 'interest'){
+        verb = 'participate'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(participation) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    if(mood == 'positive'){
+        sentence += ', and ' + random(extras)
+    }
+    if(mood == 'negative'){
+        sentence += ', but ' + random(negative_extra)
+    }
+    return sentence[0].toUpperCase() + sentence.slice(1) + '.'
+}
+console.log(getSentence('listening','positive'))
+console.log(getSentence('pronounciation','positive'))
+console.log(getSentence('interest','positive'))
+
+
+</script>
+
+    </head>
+    <body>
+        <h4>Type:</h4>
+        <select id="typeSel">
+            <option>listening</option>
+            <option>pronounciation</option>
+            <option>interest</option>
+        </select>
+        <h4>Tone:</h4>
+        <select id="toneSel">
+            <option>neutral</option>
+            <option>positive</option>
+            <option>negative</option>
+        </select>
+        <br>
+        <button onclick="document.getElementById('mainText').innerText += '\n' + getSentence(document.getElementById('typeSel').value,document.getElementById('toneSel').value)" style="margin-top: 10px;">Generate</button>
+        <p id='mainText'></p>
+    </body>
+</html>
