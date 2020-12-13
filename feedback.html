@@ -1,12 +1,16 @@
 <html>
     <head>
     <script>
-let positive_words = ['well','properly','nicely','with almost no mistakes','very well']
+let positive_words = ['well','properly','nicely','with almost no mistakes','very well','with no problems','with 0 issues']
 let sentences = ['is able to','can','likes to']
 let listening = ['is able to understand the teacher\'s questions']
+let reading = ['is able to read the stories','is able to read the key words','can read most of the book','can sound out new words by reading']
 let speaking = ['can respond with sentences','can talk freely','talks fluidly','speaks out loud']
 let participation = ['is always interested','is always trying','tries every time','likes to try']
-let extras = ['with no issues','with no big problems','without other issues','is improving','is improving every day','is improving constantly']
+let grammar = ['can use full sentences','can use the grammar in the chapter','can easily make the sentences from the chapter','often uses full sentences','uses the correct grammar']
+let handwriting = ['can write very well','always writes legibly','has writing that is neat and tidy'];
+let vocabulary = ['can remember all the key words','knows all the vocab words','can use all the key words','knows all the key vocab in the chapter']
+let extras = ['with no issues','with no big problems','without other issues','is improving','is improving every day','is improving constantly','shows improvement every day']
 let negative_extra = ['could use some work','can improve','can progress a bit more']
 
 function random(array){
@@ -39,6 +43,36 @@ function getSentence(type,mood){
         let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
         sentence = order;
     }
+    if(type == 'vocabulary'){
+        verb = Math.random()<0.5 ?'use the vocabulary' : 'use the vocab';
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(vocabulary) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    if(type == 'handwriting'){
+        verb = 'write'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(handwriting) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    
+    if(type == 'reading'){
+        verb = 'read'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(reading) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
+    
+    if(type == 'grammar'){
+        verb = 'speak'
+        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
+        let part2 = random(grammar) 
+        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
+        sentence = order;
+    }
     if(mood == 'positive'){
         sentence += ', and ' + random(extras)
     }
@@ -47,9 +81,12 @@ function getSentence(type,mood){
     }
     return sentence[0].toUpperCase() + sentence.slice(1) + '.'
 }
-console.log(getSentence('listening','positive'))
-console.log(getSentence('pronounciation','positive'))
-console.log(getSentence('interest','positive'))
+console.log(getSentence('handwriting', Math.random()<0.5? 'positive' : 'neutral'))
+console.log(getSentence('vocabulary',Math.random()<0.5? 'positive' : 'neutral'))
+console.log(getSentence('grammar',Math.random()<0.5? 'positive' : 'neutral'))
+console.log(getSentence('reading',Math.random()<0.5? 'positive' : 'neutral'))
+
+
 
 
 </script>
@@ -61,6 +98,10 @@ console.log(getSentence('interest','positive'))
             <option>listening</option>
             <option>pronounciation</option>
             <option>interest</option>
+            <option>reading</option>
+            <option>grammar</option>
+            <option>vocabulary</option>
+            <option>handwriting</option>
         </select>
         <h4>Tone:</h4>
         <select id="toneSel">
