@@ -17,7 +17,7 @@
 
 
         let extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
-            'with 0 issues', 'with confidence', 'quite well', 'pretty well'
+            'with 0 issues', 'with confidence', 'quite well', 'pretty well','skillfully'
         ]
         let negative_words = ['could use some work', 'can improve', 'can progress a bit more',
             'should try a bit harder', 'can do a bit more'
@@ -28,9 +28,8 @@
         ]
         let vocab = {
             'general': ['is able to', 'can', 'has the ability to', 'shows that they can', 'shows the ability to',
-                'can skillfully',
             ],
-            'listening': ['is able to understand the teacher\'s questions', 'can follow most of the teachers words',
+            'listening': ['is able to understand the teacher\'s questions', 'can follow most of the teacher\'s words',
                 'can understand the teacher\'s commands'
             ],
             'reading': ['is able to read the stories', 'is able to read the key words', 'can read most of the book',
@@ -88,7 +87,9 @@
             } else {
                 console.error(typeof stringOrArray + ' is not a valid input')
             }
-            input = input.filter(word => !generalWords.includes(word))
+            input = input.filter(word => !generalWords.includes(word) && word !== '' && word !== undefined);
+            if(input.length<1) return target
+            
             //console.log(input)
             let indices = [];
             target.forEach((targ, i) => {
@@ -103,7 +104,7 @@
 
         function addS(word) {
             if (word.endsWith('y')) {
-                return word.slice(0, word.length - 2) + 'ies'
+                return word.slice(0, word.length - 1) + 'ies'
             }
             if (word.endsWith('o')) {
                 return word + 'es'
@@ -127,9 +128,22 @@
                 let part1_pos_word = random(removeDuplicates(part1_sentence, extras));
                 let part1 = (add_s ? (addS(verb)) : (part1_sentence + ' ' + verb)) + ' ' + part1_pos_word;
                 let part2 = random(removeDuplicates([part1_sentence, part1_pos_word], vocab[type]))
-                sentence = (Math.random() < 0.5 ? part1 + random([', ', ', and ']) + part2 : part2 + random([', ',
-                    ', and '
-                ]) + part1)
+                if(part1 == undefined || part2 == undefined){
+                    console.log(type, part1_pos_word, part1_sentence, add_s, part1, part2)
+                }
+                function chooseOrder(val){
+                    if(val>0.9){
+                        return part1;
+                    }
+                    if(val>0.8){
+                        return part2;
+                    }
+                    if(val>0.4){
+                        return part1 + random([', ', ', and ']) + part2;
+                    }
+                    return part2 + random([', ',', and ']) + part1;
+                }
+                sentence = chooseOrder(Math.random())
             }
 
             if (mood == 'positive') {
