@@ -1,116 +1,217 @@
 <html>
-    <head>
+
+<head>
+    <style>
+        .popup{
+            position: absolute;
+            opacity: 0;
+            width: 80px;
+            height: 25px;
+            color: blue;
+            border-radius: 10px;
+            transition-duration: 0.3s;
+            text-align: center;
+        }
+    </style>
     <script>
-let positive_words = ['well','properly','nicely','with almost no mistakes','very well','with no problems','with 0 issues']
-let sentences = ['is able to','can','likes to']
-let listening = ['is able to understand the teacher\'s questions']
-let reading = ['is able to read the stories','is able to read the key words','can read most of the book','can sound out new words by reading']
-let speaking = ['can respond with sentences','can talk freely','talks fluidly','speaks out loud']
-let participation = ['is always interested','is always trying','tries every time','likes to try']
-let grammar = ['can use full sentences','can use the grammar in the chapter','can easily make the sentences from the chapter','often uses full sentences','uses the correct grammar']
-let handwriting = ['can write very well','always writes legibly','has writing that is neat and tidy'];
-let vocabulary = ['can remember all the key words','knows all the vocab words','can use all the key words','knows all the key vocab in the chapter']
-let extras = ['with no issues','with no big problems','without other issues','is improving','is improving every day','is improving constantly','shows improvement every day']
-let negative_extra = ['could use some work','can improve','can progress a bit more']
-
-function random(array){
-    let num = Math.random()*array.length |0 ;
-    return array[num];
-}
-
-function getSentence(type,mood){
-    let verb = 'do'
-    let sentence = '';
-    if(type == 'listening'){
-        verb = 'listen'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(listening) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    if(type == 'pronounciation'){
-        verb = 'speak'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(speaking) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    
-    if(type == 'interest'){
-        verb = 'participate'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(participation) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    if(type == 'vocabulary'){
-        verb = Math.random()<0.5 ?'use the vocabulary' : 'use the vocab';
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(vocabulary) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    if(type == 'handwriting'){
-        verb = 'write'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(handwriting) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    
-    if(type == 'reading'){
-        verb = 'read'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(reading) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    
-    if(type == 'grammar'){
-        verb = 'speak'
-        let part1 = random(sentences) + ' ' +  verb + ' ' +  random(positive_words);
-        let part2 = random(grammar) 
-        let order = (Math.random()<0.5? part1 + ', and ' + part2 : part2 + ', and ' + part1)
-        sentence = order;
-    }
-    if(mood == 'positive'){
-        sentence += ', and ' + random(extras)
-    }
-    if(mood == 'negative'){
-        sentence += ', but ' + random(negative_extra)
-    }
-    return sentence[0].toUpperCase() + sentence.slice(1) + '.'
-}
-console.log(getSentence('handwriting', Math.random()<0.5? 'positive' : 'neutral'))
-console.log(getSentence('vocabulary',Math.random()<0.5? 'positive' : 'neutral'))
-console.log(getSentence('grammar',Math.random()<0.5? 'positive' : 'neutral'))
-console.log(getSentence('reading',Math.random()<0.5? 'positive' : 'neutral'))
 
 
+        let extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
+            'with 0 issues', 'with confidence', 'quite well', 'pretty well'
+        ]
+        let negative_words = ['could use some work', 'can improve', 'can progress a bit more',
+            'should try a bit harder', 'can do a bit more'
+        ]
+        let positive_words = ['with no issues', 'with no big problems', 'without other issues', 'and is improving',
+            'and is improving every day', 'and is improving constantly', 'and shows improvement every day',
+            'and shows improvement', 'and getting better every day'
+        ]
+        let vocab = {
+            'general': ['is able to', 'can', 'has the ability to', 'shows that they can', 'shows the ability to',
+                'can skillfully',
+            ],
+            'listening': ['is able to understand the teacher\'s questions', 'can follow most of the teachers words',
+                'can understand the teacher\'s commands'
+            ],
+            'reading': ['is able to read the stories', 'is able to read the key words', 'can read most of the book',
+                'can sound out new words by reading'
+            ],
+            'speaking': ['can respond with sentences', 'can talk freely', 'talks fluidly', 'speaks out loud',
+                'speaks very standardly', 'talks in full sentences'
+            ],
+            'interest': ['is always interested', 'is always trying', 'tries every time', 'likes to try',
+                'always raises their hand', 'is always paying attention'
+            ],
+            'grammar': ['can use full sentences', 'can use the grammar in the chapter',
+                'can easily make the sentences from the chapter', 'often uses full sentences',
+                'uses the correct grammar'
+            ],
+            'handwriting': ['can write very well', 'always writes legibly', 'has writing that is neat and tidy',
+                'has writing that is neat', 'has neat writing'
+            ],
+            'vocabulary': ['can remember all the key words', 'knows all the vocab words',
+                'can use all the key words', 'knows all the key vocab in the chapter'
+            ],
+        }
+        let verbs = {
+            'general': () => 'do',
+            'listening': () => 'listen',
+            'reading': () => 'read',
+            'speaking': () => random(['talk', 'speak']),
+            'interest': () => random(['try', 'participate']),
+            'grammar': () => 'write',
+            'handwriting': () => 'write',
+            'vocabulary': () => random(['talk', 'speak']),
+
+        }
+
+        function random(array) {
+            let num = Math.random() * array.length | 0;
+            return array[num];
+        }
+
+        function removeDuplicates(stringOrArray, target) {
+            if (stringOrArray == undefined || stringOrArray == '') return target
+            let generalWords = ['the', 'in', 'is', 'a', 'an', 'to', 'they', 'that', 'can', 'with', 'and']
+            let input = []
+            if (typeof stringOrArray == 'string') {
+                input = stringOrArray.split(' ');
+            } else if (stringOrArray instanceof Array) {
+                stringOrArray = stringOrArray.filter(x => x !== undefined)
+                stringOrArray.forEach(line => {
+                    if (typeof line == 'string') {
+                        input.push(...line.split(' '))
+                    } else {
+                        console.log('OH NO', input, target, line, stringOrArray)
+                    }
+                })
+            } else {
+                console.error(typeof stringOrArray + ' is not a valid input')
+            }
+            input = input.filter(word => !generalWords.includes(word))
+            //console.log(input)
+            let indices = [];
+            target.forEach((targ, i) => {
+                input.forEach(inp => {
+                    if (targ.includes(inp)) {
+                        indices.push(i);
+                    }
+                })
+            })
+            return target.filter((x, index) => !indices.includes(index))
+        }
+
+        function addS(word) {
+            if (word.endsWith('y')) {
+                return word.slice(0, word.length - 2) + 'ies'
+            }
+            if (word.endsWith('o')) {
+                return word + 'es'
+            }
+            return word + 's';
+        }
+
+        function getSentence(type, mood) {
+            let verb = 'do'
+            let sentence = '';
+            if (type) {
+                let add_s = false
+                verb = verbs[type]()
+                let part1_sentence = ''
+                if (Math.random() < 0.2) {
+                    add_s = true;
+                    // console.log('OH YEA')
+                } else {
+                    part1_sentence = random(vocab['general']);
+                }
+                let part1_pos_word = random(removeDuplicates(part1_sentence, extras));
+                let part1 = (add_s ? (addS(verb)) : (part1_sentence + ' ' + verb)) + ' ' + part1_pos_word;
+                let part2 = random(removeDuplicates([part1_sentence, part1_pos_word], vocab[type]))
+                sentence = (Math.random() < 0.5 ? part1 + random([', ', ', and ']) + part2 : part2 + random([', ',
+                    ', and '
+                ]) + part1)
+            }
+
+            if (mood == 'positive') {
+                let extra_positive = removeDuplicates(sentence, positive_words);
+                // console.log(extra_positive)
+                sentence += ', ' + random(extra_positive)
+            }
+            if (mood == 'negative') {
+                sentence += ', but ' + random(removeDuplicates(sentence, negative_words))
+            }
+            return sentence[0].toUpperCase() + sentence.slice(1) + '.'
+        }
+        console.log(getSentence('listening', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('speaking', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('interest', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('reading', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('grammar', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('vocabulary', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        console.log(getSentence('handwriting', Math.random() < 0.5 ? 'positive' : 'neutral'))
 
 
-</script>
+        function popup(x,y){
+            let copied  = document.createTextNode('copied!')
+            let p = document.createElement('p')
+            p.append(copied);
+            p.setAttribute('class','popup')
+            p.style.left = x + 'px'
+            p.style.top = y + 'px'
+            document.body.append(p)
+            setTimeout(()=>{
+                p.style.opacity = '0.7';
+                p.style.top = y-50 + 'px'
+                setTimeout(()=>{
+                    document.body.removeChild(p)
+                },1000)
+            },100)
+        }
+        function createSentence(){
+            let main = document.getElementById('mainText') 
+            let sentence = getSentence(document.getElementById('typeSel').value,document.getElementById('toneSel').value)
+            let newSentence = document.createElement('p')
+            let textNode = document.createTextNode(sentence)
+            newSentence.append(textNode);
+            main.append(newSentence)
+            newSentence.addEventListener('click',(ev)=>{
+                var range = document.createRange();
+                var selection = window.getSelection();
+                range.selectNodeContents(newSentence);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand("copy");
+                selection.removeAllRanges();
+                popup(ev.clientX,ev.clientY)
+            })
+        }
 
-    </head>
-    <body>
-        <h4>Type:</h4>
-        <select id="typeSel">
-            <option>listening</option>
-            <option>pronounciation</option>
-            <option>interest</option>
-            <option>reading</option>
-            <option>grammar</option>
-            <option>vocabulary</option>
-            <option>handwriting</option>
-        </select>
-        <h4>Tone:</h4>
-        <select id="toneSel">
-            <option>neutral</option>
-            <option>positive</option>
-            <option>negative</option>
-        </select>
-        <br>
-        <button onclick="document.getElementById('mainText').innerText += '\n' + getSentence(document.getElementById('typeSel').value,document.getElementById('toneSel').value)" style="margin-top: 10px;">Generate</button>
-        <p id='mainText'></p>
-    </body>
+    </script>
+
+</head>
+
+<body>
+    <h4>Type:</h4>
+    <select id="typeSel">
+        <option>listening</option>
+        <option>speaking</option>
+        <option>interest</option>
+        <option>reading</option>
+        <option>grammar</option>
+        <option>vocabulary</option>
+        <option>handwriting</option>
+    </select>
+    <h4>Tone:</h4>
+    <select id="toneSel">
+        <option>neutral</option>
+        <option>positive</option>
+        <option>negative</option>
+    </select>
+    <br>
+    <button
+        onclick="createSentence()"
+        style="margin-top: 10px;">Generate</button>
+    <p id='mainText'></p>
+</body>
+
 </html>
