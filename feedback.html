@@ -16,29 +16,31 @@
     <script>
 
         let extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
-            'with 0 issues', 'with confidence', 'quite well', 'pretty well','skillfully'
+            'with 0 issues', 'with confidence', 'quite well', 'pretty well', 'skillfully', 'on par with others', 'better than average','as instructed'
         ]
         let negative_words = ['could use some work', 'can improve', 'can progress a bit more',
             'should try a bit harder', 'can do a bit more'
         ]
         let positive_words = ['with no issues', 'with no big problems', 'without other issues', 'and is improving',
             'and is improving every day', 'and is improving constantly', 'and shows improvement every day',
-            'and shows improvement', 'and getting better every day'
+            'and shows improvement', 'and getting better every day','always trying their best','setting a good example for others',
         ]
         let vocab = {
             'general': ['is able to', 'can', 'has the ability to', 'shows that they can', 'shows the ability to',
             ],
             'listening': ['is able to understand the teacher\'s questions', 'can follow most of the teacher\'s words',
-                'can understand the teacher\'s commands'
+                'can understand the teacher\'s commands','can listen to and respond to the teacher','understands the teacher',
+                'understands the teacher well','understands the teacher\'s words'
             ],
             'reading': ['is able to read the stories', 'is able to read the key words', 'can read most of the book',
-                'can sound out new words by reading'
+                'can sound out new words by reading','is able to read any section given','is able to read new words',
+                'can read most sections','can read any of the words given',
             ],
             'speaking': ['can respond with sentences', 'can talk freely', 'talks fluidly', 'speaks out loud',
-                'speaks very standardly', 'talks in full sentences'
+                'speaks very standardly', 'talks in full sentences', 
             ],
             'interest': ['is always interested', 'is always trying', 'tries every time', 'likes to try',
-                'always raises their hand', 'is always paying attention'
+                'always raises their hand', 'is always paying attention','tries very often','participates in every game','does every activity in class'
             ],
             'grammar': ['can use full sentences', 'can use the grammar in the chapter',
                 'can easily make the sentences from the chapter', 'often uses full sentences',
@@ -238,13 +240,13 @@
         <button onclick="createSentence('vocabulary')">vocabulary</button>
         <button onclick="createSentence('handwriting')">handwriting</button>
         <button onclick="repeat()">REDO</button>
-    <h4>Tone:</h4>
-    <select id="toneSel">
-        <option>neutral</option>
-        <option>positive</option>
-        <option>negative</option>
-        <option>random positive/neutral</option>
-    </select>
+        <h4>Tone:</h4>
+        <select id="toneSel">
+            <option>neutral</option>
+            <option>positive</option>
+            <option>negative</option>
+            <option>random positive/neutral</option>
+        </select>
     <p id='mainText'></p>
 </body>
 
