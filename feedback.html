@@ -88,16 +88,50 @@
         let verbs = {
             'general': () => 'do',
             'listening': () => random(['listen', 'understand', 'follow']),
-            'reading': () => 'read',
+            'reading': () => random(['read','sound']), //wil become read out loud
             'speaking': () => random(['talk', 'speak', 'communicate']),
-            'pronounciation': () => random(['pronounce', 'speak']),
-            'interest': () => random(['try', 'participate', 'compete']),
-            'grammar': () => 'write',
-            'handwriting': () => 'write',
+            'pronounciation': () => random(['pronounce', 'speak']), //pronounce will become pronounce words in final pass
+            'interest': () => random(['try', 'participate', 'compete', 'pay']), //pay will become pays attention
+            'grammar': () => random(['write','make','use']), //make will become makes sentences
+            'handwriting': () => 'write', //will become writes words/ sentences
             'vocabulary': () => random(['talk', 'speak']),
-
         }
 
+        let predicate_dict = {
+            'follow':['instructions','the lesson','the teacher','the conversation', ''],
+            'understand':['instructions','the lesson','the teacher','the conversation',''],
+            'read': ['out loud',''],
+            'pronounce': ['words','sentences'],
+            'pay':['attention'],
+            'make':['sentences','questions'],
+            'use':['the keywords','the grammar'],
+            'write':['words','sentences','answers',''],
+            'sound':['out the words','out the keywords'],
+        }
+        let all_sentences = [];
+        let all_predicates = {};
+        function finalPass(sentence){
+            let target_words = Object.keys(predicate_dict)
+            let target_word_s = target_words.map(x=>addS(x))
+            words = sentence.split(' ');
+            for(let i = 0; i<words.length;i++){
+                let un_sd_word = words[i];
+                if(target_words.includes(words[i]) || target_word_s.includes(words[i])){
+                    if(target_word_s.includes(words[i])){
+                        un_sd_word = target_words[target_word_s.indexOf(words[i])]
+                    }
+                    //word is in the sentence
+                    if(Object.keys(all_predicates).includes(words[i]) && all_predicates[words[i]].includes(words[i+1])){
+                        //we might have a prewritten sentence that has this word
+                    }else{
+                        console.log(un_sd_word)
+                        words.splice(i+1,0,random(predicate_dict[un_sd_word]))
+                    }
+                }
+            }
+            console.log(words)
+            return words.join(' ')
+        }
 
         let extras = Array.from(original_extras);
         let negative_words = Array.from(original_negative_words);
@@ -113,6 +147,25 @@
             'handwriting': Array.from(original_vocab['handwriting']),
             'vocabulary': Array.from(original_vocab['vocabulary']),
         };
+
+        function populateAllSentences(){
+            let target_words = Object.keys(predicate_dict)
+            let target_word_s = target_words.map(x=>addS(x))
+            all_sentences = negative_words.concat(positive_words).concat(extras)
+            Object.keys(vocab).forEach(key=>{
+                all_sentences = all_sentences.concat(vocab[key])
+            })
+            console.log(all_sentences)
+            all_sentences.forEach(sentence=>{
+                sentence.split(' ').forEach((word,i)=>{
+                    if(target_words.includes(word) || target_word_s.includes(word)){
+                        if(!all_predicates[word]) all_predicates[word] = [];
+                        all_predicates[word].push(sentence.split(' ')[i+1]);
+                        all_predicates[word] =Array.from(new Set(all_predicates[word]))
+                    }
+                })
+            })
+        }
 
         function random(array) {
             let num = Math.random() * array.length | 0;
@@ -154,6 +207,9 @@
 
         function addS(word) {
             if (word.endsWith('y')) {
+                if(word.endsWith('ay')){
+                    return word + 's'
+                }
                 return word.slice(0, word.length - 1) + 'ies'
             }
             if (word.endsWith('o')) {
@@ -245,6 +301,8 @@
                 removeForVariety('negative_words', extra_negative)
                 sentence += ', but ' + extra_negative
             }
+            sentence = finalPass(sentence);
+
             return sentence[0].toUpperCase() + sentence.slice(1) + '.'
         }
         // console.log(getSentence('listening', Math.random() < 0.5 ? 'positive' : 'neutral'))
@@ -319,6 +377,8 @@
                 createSentence(type)
             })
         }
+        
+        populateAllSentences()
     </script>
 
 </head>
