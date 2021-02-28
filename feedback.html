@@ -2,7 +2,7 @@
 
 <head>
     <style>
-        .popup{
+        .popup {
             position: absolute;
             opacity: 0;
             width: 80px;
@@ -14,33 +14,65 @@
         }
     </style>
     <script>
+        
 
-        let extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
-            'with 0 issues', 'with confidence', 'quite well', 'pretty well', 'skillfully', 'on par with others', 'better than average','as instructed'
+        let original_extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
+            'with 0 issues', 'with confidence', 'quite well', 'pretty well', 'skillfully', 'on par with others',
+            'better than average', 'as instructed', 'on a good level',
+            'on a decent level', 'at the right level', 'without much hardship', 'without many problems'
         ]
-        let negative_words = ['could use some work', 'can improve', 'can progress a bit more',
-            'should try a bit harder', 'can do a bit more'
+        let original_negative_words = ['could use some work', 'can improve', 'can progress a bit more',
+            'should try a bit harder', 'can do a bit more', 'should focus more', 'should continue learning',
+            'should be more attentive', 'should do more',
+            'should progress more', 'should try to improve'
         ]
-        let positive_words = ['with no issues', 'with no big problems', 'without other issues', 'and is improving',
+        let original_positive_words = ['with no issues', 'with no big problems', 'without other issues',
+            'and is improving',
             'and is improving every day', 'and is improving constantly', 'and shows improvement every day',
-            'and shows improvement', 'and getting better every day','always trying their best','setting a good example for others',
+            'and shows improvement', 'and getting better every day', 'always trying their best',
+            'setting a good example for others', 'shows improvement every new class',
+            'loves to learn', 'keeps improving', 'still keeps improving'
         ]
-        let vocab = {
+        let original_vocab = {
             'general': ['is able to', 'can', 'has the ability to', 'shows that they can', 'shows the ability to',
+                'shows no difficulty to'
             ],
-            'listening': ['is able to understand the teacher\'s questions', 'can follow most of the teacher\'s words',
-                'can understand the teacher\'s commands','can listen to and respond to the teacher','understands the teacher',
-                'understands the teacher well','understands the teacher\'s words'
+            'listening': ['is able to understand the teacher\'s questions',
+                'can follow most of the teacher\'s words',
+                'can understand the teacher\'s commands', 'can listen to and respond to the teacher',
+                'understands the teacher',
+                'understands the teacher well', 'understands the teacher\'s words', 'always attentive',
+                'can follow the class', 'can keep up with the lesson',
+                'follows the topic'
             ],
             'reading': ['is able to read the stories', 'is able to read the key words', 'can read most of the book',
-                'can sound out new words by reading','is able to read any section given','is able to read new words',
-                'can read most sections','can read any of the words given',
+                'can sound out new words by reading', 'is able to read any section given',
+                'is able to read new words',
+                'can read most sections', 'can read any of the words given',
+                'can read most of the book content', 'is able to read most of the book content',
+                'can understand most of the book'
             ],
             'speaking': ['can respond with sentences', 'can talk freely', 'talks fluidly', 'speaks out loud',
-                'speaks very standardly', 'talks in full sentences', 
+                'speaks very standardly', 'talks in full sentences',
+                'can communicate with classmates and the teacher', 'can properly talk to the teacher',
+                'can talk with other students and the teacher', 'can communicate with others',
+                'can talk about any topic of the book', 'can communicate on every topic'
+            ],
+            'pronounciation': ['understandable to everyone', 'very clear',
+                'understandable to the teacher and classmates', 'easily understandable to all',
+                'can sound out new words', 'has proper pronounciation', 'had good pronounciation',
+                'is able to pronounce all key words', 'is able to say all the words correctly',
+                'can be understood by other students', 'can be understood by students and the teacher'
+
             ],
             'interest': ['is always interested', 'is always trying', 'tries every time', 'likes to try',
-                'always raises their hand', 'is always paying attention','tries very often','participates in every game','does every activity in class'
+                'always raises their hand', 'is always paying attention', 'tries very often',
+                'participates in every game', 'does every activity in class',
+                'very active', 'very curious', 'very active and curious', 'always eager for class',
+                'likes to compete and participate', 'loves to compete', 'loves to participate',
+                'always active', 'participates in most of the classroom activities', 'likes being active',
+                'loves being active', 'attentive and eager for class', 'eager for class',
+                'very attentive in class', 'is interested in the class'
             ],
             'grammar': ['can use full sentences', 'can use the grammar in the chapter',
                 'can easily make the sentences from the chapter', 'often uses full sentences',
@@ -55,15 +87,32 @@
         }
         let verbs = {
             'general': () => 'do',
-            'listening': () => 'listen',
+            'listening': () => random(['listen', 'understand', 'follow']),
             'reading': () => 'read',
-            'speaking': () => random(['talk', 'speak']),
-            'interest': () => random(['try', 'participate']),
+            'speaking': () => random(['talk', 'speak', 'communicate']),
+            'pronounciation': () => random(['pronounce', 'speak']),
+            'interest': () => random(['try', 'participate', 'compete']),
             'grammar': () => 'write',
             'handwriting': () => 'write',
             'vocabulary': () => random(['talk', 'speak']),
 
         }
+
+
+        let extras = Array.from(original_extras);
+        let negative_words = Array.from(original_negative_words);
+        let positive_words = Array.from(original_positive_words);
+        let vocab = {
+            'general': Array.from(original_vocab['general']),
+            'listening': Array.from(original_vocab['listening']),
+            'reading': Array.from(original_vocab['reading']),
+            'speaking': Array.from(original_vocab['speaking']),
+            'pronounciation': Array.from(original_vocab['pronounciation']),
+            'interest': Array.from(original_vocab['interest']),
+            'grammar': Array.from(original_vocab['grammar']),
+            'handwriting': Array.from(original_vocab['handwriting']),
+            'vocabulary': Array.from(original_vocab['vocabulary']),
+        };
 
         function random(array) {
             let num = Math.random() * array.length | 0;
@@ -89,8 +138,8 @@
                 console.error(typeof stringOrArray + ' is not a valid input')
             }
             input = input.filter(word => !generalWords.includes(word) && word !== '' && word !== undefined);
-            if(input.length<1) return target
-            
+            if (input.length < 1) return target
+
             //console.log(input)
             let indices = [];
             target.forEach((targ, i) => {
@@ -112,7 +161,40 @@
             }
             return word + 's';
         }
-
+        function removeForVariety(type,text){
+            if(type.includes(':')){
+                type = type.split(':')
+            }else{
+                type = [type]
+            } 
+            switch(type[0]){
+                case 'extras':
+                    extras.splice(extras.indexOf(text),1)
+                    if(extras.length==0){
+                        extras = Array.from(original_extras)
+                    }
+                    break;
+                case 'negative_words':
+                    negative_words.splice(negative_words.indexOf(text),1)
+                    if(negative_words.length==0){
+                        negative_words = Array.from(original_negative_words)
+                    }
+                    break;
+                case 'positive_words':
+                    positive_words.splice(positive_words.indexOf(text),1)
+                    if(positive_words.length==0){
+                        positive_words = Array.from(original_positive_words)
+                    }
+                    break;
+                case 'vocab':
+                    vocab[type[1]].splice(vocab[type[1]].indexOf(text),1)
+                    if(vocab[type[1]].length==0){
+                        vocab[type[1]] = Array.from(original_vocab[type[1]])
+                    }
+                    break;
+            }    
+            
+        }
         function getSentence(type, mood) {
             let verb = 'do'
             let sentence = '';
@@ -122,75 +204,85 @@
                 let part1_sentence = ''
                 if (Math.random() < 0.2) {
                     add_s = true;
-                    // console.log('OH YEA')
                 } else {
                     part1_sentence = random(vocab['general']);
+                    removeForVariety('vocab:general',part1_sentence)
                 }
                 let part1_pos_word = random(removeDuplicates(part1_sentence, extras));
+                removeForVariety('extras',part1_pos_word)
                 let part1 = (add_s ? (addS(verb)) : (part1_sentence + ' ' + verb)) + ' ' + part1_pos_word;
                 let part2 = random(removeDuplicates([part1_sentence, part1_pos_word], vocab[type]))
-                if(part1 == undefined || part2 == undefined){
+                removeForVariety('vocab:' + type, part2)
+                if (part1 == undefined || part2 == undefined) {
                     console.log(type, part1_pos_word, part1_sentence, add_s, part1, part2)
                 }
-                function chooseOrder(val){
-                    if(val>0.9){
+
+                function chooseOrder(val) {
+                    if (val > 0.9) {
                         return part1;
                     }
-                    if(val>0.8){
+                    if (val > 0.8) {
                         return part2;
                     }
-                    if(val>0.4){
+                    if (val > 0.5) {
                         return part1 + random([', ', ', and ']) + part2;
                     }
-                    return part2 + random([', ',', and ']) + part1;
+                    if (val > 0.3) {
+                        return part1 + '. ' + part2[0].toUpperCase() + part2.slice(1)
+                    }
+                    return part2 + random([', ', ', and ']) + part1;
                 }
                 sentence = chooseOrder(Math.random())
             }
 
             if (mood == 'positive') {
                 let extra_positive = removeDuplicates(sentence, positive_words);
-                // console.log(extra_positive)
+                removeForVariety('positive_words',extra_positive)
                 sentence += ', ' + random(extra_positive)
             }
             if (mood == 'negative') {
-                sentence += ', but ' + random(removeDuplicates(sentence, negative_words))
+                let extra_negative = random(removeDuplicates(sentence, negative_words));
+                removeForVariety('negative_words', extra_negative)
+                sentence += ', but ' + extra_negative
             }
             return sentence[0].toUpperCase() + sentence.slice(1) + '.'
         }
-        console.log(getSentence('listening', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('speaking', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('interest', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('reading', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('grammar', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('vocabulary', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        console.log(getSentence('handwriting', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('listening', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('speaking', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('pronounciation', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('interest', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('reading', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('grammar', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('vocabulary', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('handwriting', Math.random() < 0.5 ? 'positive' : 'neutral'))
 
 
-        function popup(x,y){
-            let copied  = document.createTextNode('copied!')
+        function popup(x, y) {
+            let copied = document.createTextNode('copied!')
             let p = document.createElement('p')
             p.append(copied);
-            p.setAttribute('class','popup')
+            p.setAttribute('class', 'popup')
             p.style.left = x + 'px'
             p.style.top = y + 'px'
             document.body.append(p)
-            setTimeout(()=>{
+            setTimeout(() => {
                 p.style.opacity = '0.7';
-                p.style.top = y-50 + 'px'
-                setTimeout(()=>{
+                p.style.top = y - 50 + 'px'
+                setTimeout(() => {
                     document.body.removeChild(p)
-                },1000)
-            },100)
+                }, 1000)
+            }, 100)
         }
         let LAST_SELECTED = []
-        function createSentence(type){
+
+        function createSentence(type) {
             LAST_SELECTED.push(type)
-            let main = document.getElementById('mainText') 
+            let main = document.getElementById('mainText')
             let tone = document.getElementById('toneSel').value
-            if(tone == 'random positive/neutral'){
+            if (tone == 'random positive/neutral') {
                 tone = Math.random() < 0.5 ? 'positive' : 'neutral'
             }
-            let sentence = getSentence(type,tone)
+            let sentence = getSentence(type, tone)
             let creation = document.createElement('p')
             let textNodeB = document.createTextNode(type + ': ')
             creation.append(textNodeB)
@@ -200,7 +292,7 @@
             creation.style.margin = '0'
             creation.append(newSentence)
             main.append(creation)
-            newSentence.addEventListener('click',(ev)=>{
+            newSentence.addEventListener('click', (ev) => {
                 var range = document.createRange();
                 var selection = window.getSelection();
                 range.selectNodeContents(newSentence);
@@ -208,45 +300,47 @@
                 selection.addRange(range);
                 document.execCommand("copy");
                 selection.removeAllRanges();
-                popup(ev.clientX,ev.clientY)
+                popup(ev.clientX, ev.clientY)
                 newSentence.style.opacity = 0.5
             })
+            console.log(extras)
         }
-        function repeat(){
-            let main = document.getElementById('mainText') 
-            if(LAST_SELECTED.length == 0){
+
+        function repeat() {
+            let main = document.getElementById('mainText')
+            if (LAST_SELECTED.length == 0) {
                 main.innerText = 'no sentences selected!'
                 return;
             }
             main.innerText = ''
             let toCreate = Array.from(LAST_SELECTED)
             LAST_SELECTED = [];
-            toCreate.forEach(type=>{
+            toCreate.forEach(type => {
                 createSentence(type)
             })
         }
-
     </script>
 
 </head>
 
 <body>
     <h4>Type:</h4>
-        <button onclick="createSentence('listening')">listening</button>
-        <button onclick="createSentence('speaking')">speaking</button>
-        <button onclick="createSentence('interest')">interest</button>
-        <button onclick="createSentence('reading')">reading</button>
-        <button onclick="createSentence('grammar')">grammar</button>
-        <button onclick="createSentence('vocabulary')">vocabulary</button>
-        <button onclick="createSentence('handwriting')">handwriting</button>
-        <button onclick="repeat()">REDO</button>
-        <h4>Tone:</h4>
-        <select id="toneSel">
-            <option>neutral</option>
-            <option>positive</option>
-            <option>negative</option>
-            <option>random positive/neutral</option>
-        </select>
+    <button onclick="createSentence('listening')">listening</button>
+    <button onclick="createSentence('speaking')">speaking</button>
+    <button onclick="createSentence('pronounciation')">pronounciation</button>
+    <button onclick="createSentence('interest')">interest</button>
+    <button onclick="createSentence('reading')">reading</button>
+    <button onclick="createSentence('grammar')">grammar</button>
+    <button onclick="createSentence('vocabulary')">vocabulary</button>
+    <button onclick="createSentence('handwriting')">handwriting</button>
+    <button onclick="repeat()">REDO</button>
+    <h4>Tone:</h4>
+    <select id="toneSel">
+        <option>neutral</option>
+        <option>positive</option>
+        <option>negative</option>
+        <option>random positive/neutral</option>
+    </select>
     <p id='mainText'></p>
 </body>
 
