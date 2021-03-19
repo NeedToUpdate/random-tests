@@ -12,10 +12,9 @@
             transition-duration: 0.3s;
             text-align: center;
         }
+
     </style>
     <script>
-        
-
         let original_extras = ['well', 'properly', 'nicely', 'with almost no mistakes', 'very well', 'with no problems',
             'with 0 issues', 'with confidence', 'quite well', 'pretty well', 'skillfully', 'on par with others',
             'better than average', 'as instructed', 'on a good level',
@@ -37,7 +36,7 @@
             'general': ['is able to', 'can', 'has the ability to', 'shows that they can', 'shows the ability to',
                 'shows no difficulty to'
             ],
-            'listening': ['is able to understand the teacher\'s questions','can get what the teacher is asking',
+            'listening': ['is able to understand the teacher\'s questions', 'can get what the teacher is asking',
                 'can follow most of the teacher\'s words', 'quickly picks up on any questions',
                 'can understand the teacher\'s commands', 'can listen to and respond to the teacher', 'understands the teacher\'s english', 'always attentive',
                 'can follow the class', 'can keep up with the lesson',
@@ -55,9 +54,9 @@
                 'can talk with other students and the teacher', 'can communicate with others',
                 'can talk about any topic of the book', 'can communicate on every topic'
             ],
-            'pronounciation': ['understandable to everyone', 'very clear',
+            'pronunciation': ['understandable to everyone', 'very clear',
                 'understandable to the teacher and classmates', 'easily understandable to all',
-                'can sound out new words', 'has proper pronounciation', 'had good pronounciation',
+                'can sound out new words', 'has proper pronunciation', 'had good pronunciation',
                 'is able to pronounce all key words', 'is able to say all the words correctly',
                 'can be understood by other students', 'can be understood by students and the teacher'
 
@@ -80,50 +79,51 @@
             ],
             'vocabulary': ['can remember all the key words', 'knows all the vocab words',
                 'can use all the key words', 'knows all the key vocab in the chapter',
-                'uses the correct words','has a large vocabulary'
+                'uses the correct words', 'has a large vocabulary'
             ],
         }
         let verbs = {
             'general': () => 'do',
             'listening': () => random(['listen', 'understand', 'follow']),
-            'reading': () => random(['read','sound']), //wil become read out loud
+            'reading': () => random(['read', 'sound']), //wil become read out loud
             'speaking': () => random(['talk', 'speak', 'communicate']),
-            'pronounciation': () => random(['pronounce', 'speak']), //pronounce will become pronounce words in final pass
+            'pronunciation': () => random(['pronounce', 'speak']), //pronounce will become pronounce words in final pass
             'interest': () => random(['try', 'participate', 'compete', 'pay']), //pay will become pays attention
-            'grammar': () => random(['write','make','use']), //make will become makes sentences
+            'grammar': () => random(['write', 'make', 'use']), //make will become makes sentences
             'handwriting': () => 'write', //will become writes words/ sentences
             'vocabulary': () => random(['talk', 'speak']),
         }
 
         let predicate_dict = {
-            'follow':['instructions','the lesson','the teacher','the conversation', ''],
-            'understand':['instructions','the lesson','the teacher','the conversation',''],
-            'read': ['out loud',''],
-            'pronounce': ['words','sentences'],
-            'pay':['attention'],
-            'make':['sentences','questions'],
-            'use':['the keywords','the grammar'],
-            'write':['words','sentences','answers',''],
-            'sound':['out the words','out the keywords'],
+            'follow': ['instructions', 'the lesson', 'the teacher', 'the conversation', ''],
+            'understand': ['instructions', 'the lesson', 'the teacher', 'the conversation', ''],
+            'read': ['out loud', ''],
+            'pronounce': ['words', 'sentences'],
+            'pay': ['attention'],
+            'make': ['sentences', 'questions'],
+            'use': ['the keywords', 'the grammar'],
+            'write': ['words', 'sentences', 'answers', ''],
+            'sound': ['out the words', 'out the keywords'],
         }
         let all_sentences = [];
         let all_predicates = {};
-        function finalPass(sentence){
+
+        function finalPass(sentence) {
             let target_words = Object.keys(predicate_dict)
-            let target_word_s = target_words.map(x=>addS(x))
+            let target_word_s = target_words.map(x => addS(x))
             words = sentence.split(' ');
-            for(let i = 0; i<words.length;i++){
+            for (let i = 0; i < words.length; i++) {
                 let un_sd_word = words[i];
-                if(target_words.includes(words[i]) || target_word_s.includes(words[i])){
-                    if(target_word_s.includes(words[i])){
+                if (target_words.includes(words[i]) || target_word_s.includes(words[i])) {
+                    if (target_word_s.includes(words[i])) {
                         un_sd_word = target_words[target_word_s.indexOf(words[i])]
                     }
                     //word is in the sentence
-                    if(Object.keys(all_predicates).includes(words[i]) && all_predicates[words[i]].includes(words[i+1])){
+                    if (Object.keys(all_predicates).includes(words[i]) && all_predicates[words[i]].includes(words[i + 1])) {
                         //we might have a prewritten sentence that has this word
-                    }else{
+                    } else {
                         console.log(un_sd_word)
-                        words.splice(i+1,0,random(predicate_dict[un_sd_word]))
+                        words.splice(i + 1, 0, random(predicate_dict[un_sd_word]))
                     }
                 }
             }
@@ -139,27 +139,27 @@
             'listening': Array.from(original_vocab['listening']),
             'reading': Array.from(original_vocab['reading']),
             'speaking': Array.from(original_vocab['speaking']),
-            'pronounciation': Array.from(original_vocab['pronounciation']),
+            'pronunciation': Array.from(original_vocab['pronunciation']),
             'interest': Array.from(original_vocab['interest']),
             'grammar': Array.from(original_vocab['grammar']),
             'handwriting': Array.from(original_vocab['handwriting']),
             'vocabulary': Array.from(original_vocab['vocabulary']),
         };
 
-        function populateAllSentences(){
+        function populateAllSentences() {
             let target_words = Object.keys(predicate_dict)
-            let target_word_s = target_words.map(x=>addS(x))
+            let target_word_s = target_words.map(x => addS(x))
             all_sentences = negative_words.concat(positive_words).concat(extras)
-            Object.keys(vocab).forEach(key=>{
+            Object.keys(vocab).forEach(key => {
                 all_sentences = all_sentences.concat(vocab[key])
             })
             console.log(all_sentences)
-            all_sentences.forEach(sentence=>{
-                sentence.split(' ').forEach((word,i)=>{
-                    if(target_words.includes(word) || target_word_s.includes(word)){
-                        if(!all_predicates[word]) all_predicates[word] = [];
-                        all_predicates[word].push(sentence.split(' ')[i+1]);
-                        all_predicates[word] =Array.from(new Set(all_predicates[word]))
+            all_sentences.forEach(sentence => {
+                sentence.split(' ').forEach((word, i) => {
+                    if (target_words.includes(word) || target_word_s.includes(word)) {
+                        if (!all_predicates[word]) all_predicates[word] = [];
+                        all_predicates[word].push(sentence.split(' ')[i + 1]);
+                        all_predicates[word] = Array.from(new Set(all_predicates[word]))
                     }
                 })
             })
@@ -205,7 +205,7 @@
 
         function addS(word) {
             if (word.endsWith('y')) {
-                if(word.endsWith('ay')){
+                if (word.endsWith('ay')) {
                     return word + 's'
                 }
                 return word.slice(0, word.length - 1) + 'ies'
@@ -215,40 +215,42 @@
             }
             return word + 's';
         }
-        function removeForVariety(type,text){
-            if(type.includes(':')){
+
+        function removeForVariety(type, text) {
+            if (type.includes(':')) {
                 type = type.split(':')
-            }else{
+            } else {
                 type = [type]
-            } 
-            switch(type[0]){
+            }
+            switch (type[0]) {
                 case 'extras':
-                    extras.splice(extras.indexOf(text),1)
-                    if(extras.length==0){
+                    extras.splice(extras.indexOf(text), 1)
+                    if (extras.length == 0) {
                         extras = Array.from(original_extras)
                     }
                     break;
                 case 'negative_words':
-                    negative_words.splice(negative_words.indexOf(text),1)
-                    if(negative_words.length==0){
+                    negative_words.splice(negative_words.indexOf(text), 1)
+                    if (negative_words.length == 0) {
                         negative_words = Array.from(original_negative_words)
                     }
                     break;
                 case 'positive_words':
-                    positive_words.splice(positive_words.indexOf(text),1)
-                    if(positive_words.length==0){
+                    positive_words.splice(positive_words.indexOf(text), 1)
+                    if (positive_words.length == 0) {
                         positive_words = Array.from(original_positive_words)
                     }
                     break;
                 case 'vocab':
-                    vocab[type[1]].splice(vocab[type[1]].indexOf(text),1)
-                    if(vocab[type[1]].length==0){
+                    vocab[type[1]].splice(vocab[type[1]].indexOf(text), 1)
+                    if (vocab[type[1]].length == 0) {
                         vocab[type[1]] = Array.from(original_vocab[type[1]])
                     }
                     break;
-            }    
-            
+            }
+
         }
+
         function getSentence(type, mood) {
             let verb = 'do'
             let sentence = '';
@@ -260,10 +262,10 @@
                     add_s = true;
                 } else {
                     part1_sentence = random(vocab['general']);
-                    removeForVariety('vocab:general',part1_sentence)
+                    removeForVariety('vocab:general', part1_sentence)
                 }
                 let part1_pos_word = random(removeDuplicates(part1_sentence, extras));
-                removeForVariety('extras',part1_pos_word)
+                removeForVariety('extras', part1_pos_word)
                 let part1 = (add_s ? (addS(verb)) : (part1_sentence + ' ' + verb)) + ' ' + part1_pos_word;
                 let part2 = random(removeDuplicates([part1_sentence, part1_pos_word], vocab[type]))
                 removeForVariety('vocab:' + type, part2)
@@ -291,7 +293,7 @@
 
             if (mood == 'positive') {
                 let extra_positive = removeDuplicates(sentence, positive_words);
-                removeForVariety('positive_words',extra_positive)
+                removeForVariety('positive_words', extra_positive)
                 sentence += ', ' + random(extra_positive)
             }
             if (mood == 'negative') {
@@ -305,7 +307,7 @@
         }
         // console.log(getSentence('listening', Math.random() < 0.5 ? 'positive' : 'neutral'))
         // console.log(getSentence('speaking', Math.random() < 0.5 ? 'positive' : 'neutral'))
-        // console.log(getSentence('pronounciation', Math.random() < 0.5 ? 'positive' : 'neutral'))
+        // console.log(getSentence('pronunciation', Math.random() < 0.5 ? 'positive' : 'neutral'))
         // console.log(getSentence('interest', Math.random() < 0.5 ? 'positive' : 'neutral'))
         // console.log(getSentence('reading', Math.random() < 0.5 ? 'positive' : 'neutral'))
         // console.log(getSentence('grammar', Math.random() < 0.5 ? 'positive' : 'neutral'))
@@ -375,8 +377,9 @@
                 createSentence(type)
             })
         }
-        
+
         populateAllSentences()
+
     </script>
 
 </head>
@@ -385,7 +388,7 @@
     <h4>Type:</h4>
     <button onclick="createSentence('listening')">listening</button>
     <button onclick="createSentence('speaking')">speaking</button>
-    <button onclick="createSentence('pronounciation')">pronounciation</button>
+    <button onclick="createSentence('pronunciation')">pronunciation</button>
     <button onclick="createSentence('interest')">interest</button>
     <button onclick="createSentence('reading')">reading</button>
     <button onclick="createSentence('grammar')">grammar</button>
