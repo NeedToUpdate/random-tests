@@ -12,16 +12,21 @@
 
 <body>
     <h4>Returning Mons</h4>
-    <ul id="list2"></ul>
-    <h4>New Mons</h4>
-    <ul id="list1"></ul>
+    <div style="display: flexbox;"
+        id="list2"></div>
+    <h4>new Mons</h4>
+    <div style="display: flexbox;"
+        id="list1"></div>
 </body>
 <script>
     const APIURL = "https:pokeapi.co/api/v2";
+    const KANTO_POKEDEX = "https://pokeapi.co/api/v2/pokedex/2/";
+    const JOHTO_POKEDEX = "https://pokeapi.co/api/v2/pokedex/3/";
+    const HOENN_POKEDEX = "https://pokeapi.co/api/v2/pokedex/4/";
     const SINNOH_POKEDEX = "https://pokeapi.co/api/v2/pokedex/5/";
     const GALAR_POKEDEX = "https://pokeapi.co/api/v2/pokedex/27/";
     const GALAR_IOA_POKEDEX = "https://pokeapi.co/api/v2/pokedex/28/";
-    const GALAR_CT_POKEDEX = "https://pokeapi.co/api/v2/pokedex/28/";
+    const GALAR_CT_POKEDEX = "https://pokeapi.co/api/v2/pokedex/29/";
     const GALAR_POKEDEXES = [GALAR_POKEDEX, GALAR_IOA_POKEDEX, GALAR_CT_POKEDEX];
 
     async function getPokemon(name) {
@@ -61,61 +66,58 @@
     let newMons = [];
     let availableMons = [];
     fetch(SINNOH_POKEDEX)
-        .then((x) => x.json().then((x) => (SINNOH_POKEMON = x.pokemon_entries.map((x) => x.pokemon_species.name))))
+        .then((res) => res.json().then((json_data) => (SINNOH_POKEMON = json_data.pokemon_entries.map((x) => x.pokemon_species.name))))
         .then(() => {
-            let count = 0;
-            GALAR_POKEDEXES.forEach((dex) => {
-                fetch(dex).then((x) =>
-                    x.json().then((x) => {
-                        GALAR_POKEMON.push(...x.pokemon_entries.map((x) => x.pokemon_species.name));
-                        count++
-                        if (count == 3) {
-                            GALAR_POKEMON = Array.from(new Set(GALAR_POKEMON));
-                            availableMons = SINNOH_POKEMON.filter((x) => !GALAR_POKEMON.includes(x));
-                            newMons = SINNOH_POKEMON.filter((x) => GALAR_POKEMON.includes(x));
-                            availableMons.forEach(async (x) => {
-                                let data = await getPokemonSpecies(x);
-                                let isOK = false;
-                                if (Object.keys(data).includes('evolution_chain')) {
-                                    let evoChain = await getItem(data.evolution_chain.url)
-                                    isOK = evoChain.chain.evolves_to.length === 0;
-                                } else {
-                                    isOK = true;
-                                }
-                                if (isOK) {
-                                    let basedata = await getPokemon(x);
-                                    let li = document.createElement("li");
-                                    li.innerText = x;
-                                    document.getElementById("list1").append(li);
-                                    let img = document.createElement('img')
-                                    img.setAttribute('src', basedata.sprites.front_shiny)
-                                    li.append(img)
-                                }
-                            });
-                            newMons.forEach(async (x) => {
-                                let data = await getPokemonSpecies(x);
-                                let isOK = false;
-                                if (Object.keys(data).includes('evolution_chain')) {
-                                    let evoChain = await getItem(data.evolution_chain.url)
-                                    isOK = evoChain.chain.evolves_to.length === 0;
-                                } else {
-                                    isOK = true;
-                                }
-                                if (isOK) {
-                                    let basedata = await getPokemon(x);
-                                    let li = document.createElement("li");
-                                    li.innerText = x;
-                                    document.getElementById("list2").append(li);
-                                    let img = document.createElement('img')
-                                    img.setAttribute('src', basedata.sprites.front_shiny)
-                                    li.append(img)
-                                }
-                            });
-                        }
-                    })
-                );
-            });
-        }).catch(x => console.log(x))
+            fetch(HOENN_POKEDEX).then((res) => res.json().then((json_data) => (json_data.pokemon_entries.map((x) => x.pokemon_species.name).forEach(x => SINNOH_POKEMON.push(x)))))
+                .then(() => {
+                    fetch(JOHTO_POKEDEX).then((res) => res.json().then((json_data) => (json_data.pokemon_entries.map((x) => x.pokemon_species.name).forEach(x => SINNOH_POKEMON.push(x)))))
+                        .then(() => {
+                            fetch(KANTO_POKEDEX).then((res) => res.json().then((json_data) => (json_data.pokemon_entries.map((x) => x.pokemon_species.name).forEach(x => SINNOH_POKEMON.push(x)))))
+                                .then(() => {
+                                    doAllTheStuff();
+                                }).catch(x => console.log(x))
+                        })
+
+                })
+
+        })
+
+
+
+    function doAllTheStuff() {
+        SINNOH_POKEMON = Array.from(new Set(SINNOH_POKEMON))
+        let count = 0;
+        GALAR_POKEDEXES.forEach((dex) => {
+            fetch(dex).then((x) =>
+                x.json().then((x) => {
+                    GALAR_POKEMON.push(...x.pokemon_entries.map((x) => x.pokemon_species.name));
+                    count++
+                    if (count == 3) {
+                        GALAR_POKEMON = Array.from(new Set(GALAR_POKEMON));
+                        newMons = SINNOH_POKEMON.filter((x) => !GALAR_POKEMON.includes(x));
+                        returningMons = SINNOH_POKEMON.filter((x) => GALAR_POKEMON.includes(x));
+                        newMons.forEach(async (x) => {
+                            let data = await getPokemonSpecies(x);
+                            let basedata = await getPokemon(x);
+                            let img = document.createElement('img')
+                            img.style.width = '50px'
+                            img.setAttribute('src', basedata.sprites.front_shiny)
+                            document.getElementById("list1").append(img);
+                        });
+                        returningMons.forEach(async (x) => {
+                            let data = await getPokemonSpecies(x);
+                            let basedata = await getPokemon(x);
+                            let img = document.createElement('img')
+                            img.style.width = '50px'
+                            img.setAttribute('src', basedata.sprites.front_shiny);
+                            document.getElementById("list2").append(img);
+                        });
+                    }
+                })
+            );
+
+        });
+    }
 
 </script>
 
