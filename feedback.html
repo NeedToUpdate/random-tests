@@ -26,7 +26,7 @@
             'should progress more', 'should try to improve'
         ]
         let original_positive_words = ['with no issues', 'with no big problems', 'without other issues',
-            'and is improving',
+            'and is improving', 'with no major difficulties',
             'and is improving every day', 'and is improving constantly', 'and shows improvement every day',
             'and shows improvement', 'and getting better every day', 'always trying their best',
             'setting a good example for others', 'shows improvement every new class',
@@ -38,8 +38,9 @@
             ],
             'listening': ['is able to understand the teacher\'s questions', 'can get what the teacher is asking',
                 'can follow most of the teacher\'s words', 'quickly picks up on any questions',
-                'can understand the teacher\'s commands', 'can listen to and respond to the teacher', 'understands the teacher\'s english', 'always attentive',
-                'can follow the class', 'can keep up with the lesson',
+                'can understand the teacher\'s commands', 'can listen to and respond to the teacher', 'understands the teacher\'s English', 'always attentive',
+                'can follow the class', 'can keep up with the lesson', 'has excellent understanding', 'has excellent understanding of the questions',
+                'no difficulty understanding normal English flow'
             ],
             'reading': ['is able to read the stories', 'is able to read the key words', 'can read most of the book',
                 'can sound out new words by reading', 'is able to read any section given',
@@ -52,14 +53,17 @@
                 'speaks very standardly', 'talks in full sentences',
                 'can communicate with classmates and the teacher', 'can properly talk to the teacher',
                 'can talk with other students and the teacher', 'can communicate with others',
-                'can talk about any topic of the book', 'can communicate on every topic'
+                'can talk about any topic of the book', 'can communicate on every topic', 'likes to share ideas',
+                'always shares much information', 'likes to share information often', 'very comfortable speaking',
+                'uses every opportunity to speak', 'is very verbal'
             ],
             'pronunciation': ['understandable to everyone', 'very clear',
                 'understandable to the teacher and classmates', 'easily understandable to all',
                 'can sound out new words', 'has proper pronunciation', 'had good pronunciation',
                 'is able to pronounce all key words', 'is able to say all the words correctly',
-                'can be understood by other students', 'can be understood by students and the teacher'
-
+                'can be understood by other students', 'can be understood by students and the teacher',
+                'has excellent pronounciation', 'no major difficulty with the sounds', 'good pronounciation overall',
+                'has no issues pronouncing the more challenging sounds'
             ],
             'interest': ['is always interested', 'is always trying', 'tries every time', 'likes to try',
                 'always raises their hand', 'is always paying attention', 'tries very often',
@@ -68,7 +72,9 @@
                 'likes to compete and participate', 'loves to compete', 'loves to participate',
                 'always active', 'participates in most of the classroom activities', 'likes being active',
                 'loves being active', 'attentive and eager for class', 'eager for class',
-                'very attentive in class', 'is interested in the class'
+                'very attentive in class', 'is interested in the class', 'very engaged', 'always engaged',
+                'awlays wants to share ideas', 'is a great learner', 'is a quick learner', 'is a fast learner',
+                'is a proactive student', 'shows interest in everything in the class'
             ],
             'grammar': ['can use full sentences', 'can use the grammar in the chapter',
                 'can easily make the sentences from the chapter', 'often uses full sentences',
@@ -86,8 +92,8 @@
             'general': () => 'do',
             'listening': () => random(['listen', 'understand', 'follow']),
             'reading': () => random(['read', 'sound']), //wil become read out loud
-            'speaking': () => random(['talk', 'speak', 'communicate']),
-            'pronunciation': () => random(['pronounce', 'speak']), //pronounce will become pronounce words in final pass
+            'speaking': () => random(['talk', 'speak', 'communicate', 'express']), //communictate can become +verbally, express +themselves 
+            'pronunciation': () => random(['pronounce', 'speak']), //pronounce will bec ome pronounce words in final pass
             'interest': () => random(['try', 'participate', 'compete', 'pay']), //pay will become pays attention
             'grammar': () => random(['write', 'make', 'use']), //make will become makes sentences
             'handwriting': () => 'write', //will become writes words/ sentences
@@ -98,12 +104,14 @@
             'follow': ['instructions', 'the lesson', 'the teacher', 'the conversation', ''],
             'understand': ['instructions', 'the lesson', 'the teacher', 'the conversation', ''],
             'read': ['out loud', ''],
-            'pronounce': ['words', 'sentences'],
+            'pronounce': ['words', 'sentences', 'the sounds'],
             'pay': ['attention'],
-            'make': ['sentences', 'questions'],
-            'use': ['the keywords', 'the grammar'],
+            'make': ['sentences', 'questions', 'statements'],
+            'use': ['the keywords', 'the grammar', 'the words', 'the vocab'],
             'write': ['words', 'sentences', 'answers', ''],
             'sound': ['out the words', 'out the keywords'],
+            'communicate': ['', 'verbally'],
+            'express': ['themselves', 'their ideas']
         }
         let all_sentences = [];
         let all_predicates = {};
